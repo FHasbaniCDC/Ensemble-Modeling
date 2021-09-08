@@ -1,6 +1,6 @@
 #Classification
-https://www.datatechnotes.com/2018/03/classification-with-xgboost-model-in-r.html
 
+derm <- read.csv(file.choose())
 #Preparing the data
 #Classification with gbm
 #Classification with caret train method
