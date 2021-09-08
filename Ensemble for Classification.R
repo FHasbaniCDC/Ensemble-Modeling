@@ -8,9 +8,12 @@ derm <- read.csv(file.choose())
 library(gbm)
 library(caret)
 
+derm$class <- as.factor(derm$class)
 indexes = createDataPartition(derm$class, p = .75, list = F)
 train = derm[indexes, ]
 test = derm[-indexes, ]
+
+#EDA
 
 #Classification with gbm
 mod_gbm = gbm(class ~.,
@@ -26,15 +29,18 @@ print(mod_gbm)
 pred = predict.gbm(object = mod_gbm,
                    newdata = test,
                    n.trees = 200,
-                   type = "response")
+                   type = "response"
+                   )
+#?predict.gbm
 
 #obtaining class names with the highest prediction value.
-labels = colnames(pred)[apply(pred, 1, which.max)]
-result = data.frame(test$class, labels)
+labels = apply(pred,1, which.max)
+result = data.frame(test$class, as.factor(labels))
 print(result)
 
+str(test)
 #check confusion matrix
-cm = confusionMatrix(test$class, as.factor(labels))
+cm = confusionMatrix(as.factor(test$class), as.factor(labels))
 print(cm)
 
 #Classification with caret train method
@@ -54,4 +60,5 @@ print(result)
 cm = confusionMatrix(test$class, as.factor(pred))
 print(cm) 
 
-#accuracy increased from 96.59 to 97.73
+#accuracy increased from 96.59 to 96.59
+#changes happened in the classification from classes 2 and 4
